@@ -38,6 +38,10 @@ let package = Package(
             url: "https://github.com/swift-atoms/swift-coder.git",
             branch: "main"
         ),
+        .package(
+            url: "https://github.com/swift-molecules/swift-pair-parser.git",
+            branch: "main"
+        ),
     ],
     targets: [
         .target(
@@ -46,7 +50,7 @@ let package = Package(
                 .product(name: "Pair", package: "swift-pair"),
                 .product(name: "Either", package: "swift-either"),
                 .product(name: "Parser", package: "swift-parser"),
-                .product(name: "Parser Product", package: "swift-parser"),
+                .product(name: "Pair Parser", package: "swift-pair-parser"),
                 .product(name: "Serializer", package: "swift-serializer"),
                 .product(name: "Coder", package: "swift-coder"),
             ]
@@ -58,7 +62,8 @@ let package = Package(
                 .product(name: "Pair", package: "swift-pair"),
                 .product(name: "Either", package: "swift-either"),
                 .product(name: "Parser", package: "swift-parser"),
-                .product(name: "Parser Product", package: "swift-parser"),
+                .product(name: "Parser Skip", package: "swift-parser"),
+                .product(name: "Pair Parser", package: "swift-pair-parser"),
                 .product(name: "Serializer", package: "swift-serializer"),
                 .product(name: "Coder", package: "swift-coder"),
             ],
