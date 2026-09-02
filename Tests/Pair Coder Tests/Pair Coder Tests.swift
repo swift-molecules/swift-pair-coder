@@ -65,14 +65,14 @@ extension `Pair Coder`.`Edge Case` {
 extension `Pair Coder`.Integration {
 
     @Test
-    func `a coder body with two values round-trips through a Pair`() throws(any Swift.Error) {
+    func `a coder body with two noncopyable values round-trips through a Pair`() throws(any Swift.Error) {
         var buffer: Substring = ""
-        try KeyValue().serialize(Pair("k", "v"), into: &buffer)
-        #expect(buffer == "k=v")
+        try TokenPair().serialize(Pair(Token("k"), Token("v")), into: &buffer)
+        #expect(buffer == "kv")
         var cursor = buffer
-        let parsed = try KeyValue().parse(&cursor)
-        #expect(parsed.first == "k")
-        #expect(parsed.second == "v")
+        let parsed = try TokenPair().parse(&cursor)
+        #expect(parsed.first.text == "k")
+        #expect(parsed.second.text == "v")
         #expect(cursor.isEmpty)
     }
 
@@ -91,29 +91,39 @@ extension `Pair Coder`.Integration {
     }
 }
 
-private struct Marker: Coder.`Protocol` {
+
+private struct Token: ~Copyable {
+    let text: String
+
+    init(_ text: String) {
+        self.text = text
+    }
+}
+
+private struct TokenConstant: Coder.`Protocol` {
     let text: String
 
     init(_ text: String) {
         self.text = text
     }
 
-    func parse(_ input: inout Substring) throws(Mismatch) {
+    func parse(_ input: inout Substring) throws(Mismatch) -> Token {
         guard input.hasPrefix(text) else { throw .mismatch }
         input = input.dropFirst(text.count)
+        return Token(text)
     }
 
-    func serialize(_ output: Void, into buffer: inout Substring) throws(Mismatch) {
+    func serialize(_ output: borrowing Token, into buffer: inout Substring) throws(Mismatch) {
+        guard output.text == text else { throw .mismatch }
         buffer.append(contentsOf: text)
     }
 }
 
-private struct KeyValue: Coder.`Protocol` {
+private struct TokenPair: Coder.`Protocol` {
     typealias Failure = Mismatch
 
-    var body: some Coder.`Protocol`<Substring, Pair<String, String>, Substring, Mismatch> {
-        Constant("k")
-        Marker("=")
-        Constant("v")
+    var body: some Coder.`Protocol`<Substring, Pair<Token, Token>, Substring, Mismatch> {
+        TokenConstant("k")
+        TokenConstant("v")
     }
 }
