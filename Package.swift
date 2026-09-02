@@ -19,7 +19,11 @@ let package = Package(
     ],
     dependencies: [
         .package(
-            url: "https://github.com/swift-atoms/swift-coder.git",
+            url: "https://github.com/swift-atoms/swift-pair.git",
+            branch: "main"
+        ),
+        .package(
+            url: "https://github.com/swift-atoms/swift-either.git",
             branch: "main"
         ),
         .package(
@@ -31,15 +35,7 @@ let package = Package(
             branch: "main"
         ),
         .package(
-            url: "https://github.com/swift-atoms/swift-either.git",
-            branch: "main"
-        ),
-        .package(
-            url: "https://github.com/swift-atoms/swift-pair.git",
-            branch: "main"
-        ),
-        .package(
-            url: "https://github.com/swift-molecules/swift-pair-parser.git",
+            url: "https://github.com/swift-atoms/swift-coder.git",
             branch: "main"
         ),
     ],
@@ -47,23 +43,24 @@ let package = Package(
         .target(
             name: "Pair Coder",
             dependencies: [
-                .product(name: "Coder", package: "swift-coder"),
-                .product(name: "Parser", package: "swift-parser"),
-                .product(name: "Serializer", package: "swift-serializer"),
-                .product(name: "Either", package: "swift-either"),
                 .product(name: "Pair", package: "swift-pair"),
-                .product(name: "Pair Parser", package: "swift-pair-parser"),
+                .product(name: "Either", package: "swift-either"),
+                .product(name: "Parser", package: "swift-parser"),
+                .product(name: "Parser Product", package: "swift-parser"),
+                .product(name: "Serializer", package: "swift-serializer"),
+                .product(name: "Coder", package: "swift-coder"),
             ]
         ),
         .testTarget(
             name: "Pair Coder Tests",
             dependencies: [
                 .target(name: "Pair Coder"),
-                .product(name: "Coder", package: "swift-coder"),
-                .product(name: "Parser", package: "swift-parser"),
-                .product(name: "Serializer", package: "swift-serializer"),
                 .product(name: "Pair", package: "swift-pair"),
-                .product(name: "Pair Parser", package: "swift-pair-parser"),
+                .product(name: "Either", package: "swift-either"),
+                .product(name: "Parser", package: "swift-parser"),
+                .product(name: "Parser Product", package: "swift-parser"),
+                .product(name: "Serializer", package: "swift-serializer"),
+                .product(name: "Coder", package: "swift-coder"),
             ],
             path: "Tests/Pair Coder Tests"
         ),
